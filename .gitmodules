@@ -1,0 +1,3 @@
+[submodule "pk3DS"]
+	path = pk3DS
+	url = https://github.com/Xzonn/pk3DS.git
