@@ -17,7 +17,6 @@
       "pk3ds.core": {
         "type": "Project"
       }
-    },
-    "net8.0-windows7.0/win-x64": {}
+    }
   }
 }
