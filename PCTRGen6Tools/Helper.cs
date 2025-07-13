@@ -142,9 +142,10 @@ internal partial class Helper
     }
 
 
-    public static void ImportText(string inputRoot, string replaceRoot, string outputRoot)
+    public static void ImportText(string inputRoot, string replaceRoot, string outputRoot, string? overrideRoot = null)
     {
         var gameConfig = new GameConfig(GameVersion.Invalid);
+        var @override = !string.IsNullOrEmpty(overrideRoot);
 
         Directory.CreateDirectory(outputRoot);
         foreach (var filePath in Directory.GetFiles(inputRoot, "*.bin"))
@@ -158,6 +159,25 @@ internal partial class Helper
             var translations = JsonSerializer.Deserialize<List<TranslationItem>>(
                 File.ReadAllText(replacePath), TextConverter.JsonOptions
             ) ?? [];
+
+            if (@override)
+            {
+                var overridePath = Path.Combine(overrideRoot!, Path.ChangeExtension(relativePath, ".json"));
+                if (File.Exists(overridePath))
+                {
+                    var overrideTranslations = JsonSerializer.Deserialize<List<TranslationItem>>(
+                        File.ReadAllText(overridePath), TextConverter.JsonOptions
+                    ) ?? [];
+                    foreach (var line in overrideTranslations)
+                    {
+                        var existing = translations.FirstOrDefault(t => t.Index == line.Index);
+                        if ((existing is not null) && (existing.Trash != true))
+                        {
+                            existing.Translation = line.Translation;
+                        }
+                    }
+                }
+            }
 
             var textFile = new TextFile(gameConfig, File.ReadAllBytes(filePath), false);
             var lines = textFile.LineData.Select(TextConverter.GetLineString).ToArray();

@@ -7,6 +7,7 @@ public class ImportTextCommand : Command
     private string? inputRoot;
     private string? replaceRoot;
     private string? outputRoot;
+    private string? overrideRoot;
 
     public ImportTextCommand() : base("import-text", "Import texts into files")
     {
@@ -15,6 +16,7 @@ public class ImportTextCommand : Command
             {"p|path=", "The path to the original files", v => inputRoot = v},
             {"r|replace=", "The path to the files to replace", v => replaceRoot = v},
             {"o|output=", "The output path", v => outputRoot = v},
+            {"e|override=", "The path to override files", v => overrideRoot = v},
         };
     }
 
@@ -27,7 +29,7 @@ public class ImportTextCommand : Command
             throw new ArgumentException("Missing required arguments");
         }
 
-        Helper.ImportText(inputRoot, replaceRoot, outputRoot);
+        Helper.ImportText(inputRoot, replaceRoot, outputRoot, overrideRoot);
         return 0;
     }
 }
