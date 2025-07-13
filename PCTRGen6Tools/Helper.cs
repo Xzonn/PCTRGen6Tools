@@ -19,7 +19,22 @@ internal partial class Helper
             var output = Path.Combine(outputRoot, relativePath);
             Directory.CreateDirectory(output);
 
-            var garc = new GARC.LazyGARC(File.ReadAllBytes(filePath));
+            GARC.LazyGARC? garc;
+            try
+            {
+                garc = new GARC.LazyGARC(File.ReadAllBytes(filePath));
+                if (garc.FileCount == 0)
+                {
+                    Console.WriteLine($"Skipping {filePath}: no files found.");
+                    continue;
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"Skipping {filePath}: not a valid GARC file or cannot be read.");
+                continue;
+            }
+
             for (var i = 0; i < garc.FileCount; i++)
             {
                 File.WriteAllBytes(Path.Combine(output, $"{i:D4}.bin"), garc[i]);
@@ -34,7 +49,22 @@ internal partial class Helper
             var replaced = false;
             var relativePath = Path.GetRelativePath(inputRoot, filePath);
 
-            var garc = new GARC.LazyGARC(File.ReadAllBytes(filePath));
+            GARC.LazyGARC? garc;
+            try
+            {
+                garc = new GARC.LazyGARC(File.ReadAllBytes(filePath));
+                if (garc.FileCount == 0)
+                {
+                    Console.WriteLine($"Skipping {filePath}: no files found.");
+                    continue;
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"Skipping {filePath}: not a valid GARC file or cannot be read.");
+                continue;
+            }
+
             for (var i = 0; i < garc.FileCount; i++)
             {
                 var replace = Path.Combine(replaceRoot, relativePath, $"{i:D4}.bin");
