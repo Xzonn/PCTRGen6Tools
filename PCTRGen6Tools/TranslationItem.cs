@@ -1,4 +1,4 @@
-﻿namespace PCTRGen6;
+﻿namespace PCTRGen6Tools;
 
 internal class TranslationItem
 {

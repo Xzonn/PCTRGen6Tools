@@ -1,14 +1,14 @@
 ﻿using Mono.Options;
 
-namespace PCTRGen6.Commands;
+namespace PCTRGen6Tools.Commands;
 
-public class ImportCommand : Command
+public class ImportTextCommand : Command
 {
     private string? inputRoot;
     private string? replaceRoot;
     private string? outputRoot;
 
-    public ImportCommand() : base("import", "Import into garc files")
+    public ImportTextCommand() : base("import-text", "Import texts into files")
     {
         Options = new OptionSet
         {
@@ -27,7 +27,7 @@ public class ImportCommand : Command
             throw new ArgumentException("Missing required arguments");
         }
 
-        Helper.Import(inputRoot, replaceRoot, outputRoot);
+        Helper.ImportText(inputRoot, replaceRoot, outputRoot);
         return 0;
     }
 }

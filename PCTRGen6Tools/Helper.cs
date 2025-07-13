@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace PCTRGen6;
+namespace PCTRGen6Tools;
 
 internal partial class Helper
 {

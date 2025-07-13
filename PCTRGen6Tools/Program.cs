@@ -1,7 +1,7 @@
 ﻿using Mono.Options;
-using PCTRGen6.Commands;
+using PCTRGen6Tools.Commands;
 
-namespace PCTRGen6;
+namespace PCTRGen6Tools;
 
 internal partial class Program
 {
@@ -10,7 +10,7 @@ internal partial class Program
         var game = Environment.GetEnvironmentVariable("XZ_GEN6_GAME_VERSION")??"";
         if (game == "XY")
         {
-            Environment.CurrentDirectory = @"C:\Codes\PCTRGen6Build";
+            Environment.CurrentDirectory = @"C:\Codes\PCTRGen6ToolsBuild";
             var inputRoot = @"original_files";
             var replaceInputRoot = @"temp\import";
             var replaceOutputRoot = @"temp\output";
@@ -45,7 +45,7 @@ internal partial class Program
         }
         else
         {
-            CommandSet commands = new("PCTRGen6")
+            CommandSet commands = new("PCTRGen6Tools")
             {
                 new ExportCommand(),
                 new ImportCommand(),

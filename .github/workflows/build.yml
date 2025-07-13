@@ -38,22 +38,22 @@ jobs:
         with:
           dotnet-version: 8.x
           cache: true
-          cache-dependency-path: PCTRGen6/packages.lock.json
+          cache-dependency-path: PCTRGen6Tools/packages.lock.json
       - name: Build
         run: |
-          dotnet publish PCTRGen6 -c Release -o Release
-          Compress-Archive -Path "Release/*" -Destination "PCTRGen6.zip" -Force
+          dotnet publish PCTRGen6Tools -c Release -o Release
+          Compress-Archive -Path "Release/*" -Destination "PCTRGen6Tools.zip" -Force
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PCTRGen6
+          name: PCTRGen6Tools
           path: Release/*
       - name: Create release
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: PCTRGen6.zip
+          artifacts: PCTRGen6Tools.zip
           name: "${{ github.ref_name }}"
           draft: true
           tag: "${{ github.ref_name }}"
@@ -62,7 +62,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: PCTRGen6.zip
+          artifacts: PCTRGen6Tools.zip
           name: "${{ github.event.head_commit.message }}"
           prerelease: true
           tag: publish

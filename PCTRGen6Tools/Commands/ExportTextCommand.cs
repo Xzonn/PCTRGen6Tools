@@ -1,6 +1,6 @@
 ﻿using Mono.Options;
 
-namespace PCTRGen6.Commands;
+namespace PCTRGen6Tools.Commands;
 
 public class ExportTextCommand : Command
 {

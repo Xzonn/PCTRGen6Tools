@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36301.6 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCTRGen6", "PCTRGen6\PCTRGen6.csproj", "{736D4F18-BF56-4392-97AA-97C9C8BD6735}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCTRGen6Tools", "PCTRGen6Tools\PCTRGen6Tools.csproj", "{736D4F18-BF56-4392-97AA-97C9C8BD6735}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pk3DS.Core", "pk3DS\pk3DS.Core\pk3DS.Core.csproj", "{FE23ACD3-C036-83EB-C646-7E66F066C201}"
 EndProject

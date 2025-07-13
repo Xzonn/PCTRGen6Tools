@@ -1,9 +1,9 @@
-# PCTRGen6
+# PCTRGen6Tools
 
 ## 用法
 
 ``` powershell
-.\PCTRGen6.exe --help
+.\PCTRGen6Tools.exe --help
 ```
 
 ## 授权协议
