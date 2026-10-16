@@ -35,6 +35,12 @@ internal partial class Helper
                 continue;
             }
 
+            if (GARC.UnpackGARC(filePath).fatb.Entries.Any(entry => entry.IsFolder))
+            {
+                GARC.GarcUnpack(filePath, output, false);
+                continue;
+            }
+
             for (var i = 0; i < garc.FileCount; i++)
             {
                 File.WriteAllBytes(Path.Combine(output, $"{i:D4}.bin"), garc[i]);
@@ -65,11 +71,62 @@ internal partial class Helper
                 continue;
             }
 
+            var archive = GARC.UnpackGARC(filePath);
+            if (archive.fatb.Entries.Any(entry => entry.IsFolder))
+            {
+                var replace = Path.Combine(replaceRoot, relativePath);
+                if (Directory.Exists(replace))
+                {
+                    var output = Path.Combine(outputRoot, relativePath);
+                    var work = $"{output}.unpacked";
+                    Directory.CreateDirectory(work);
+                    foreach (var replacement in Directory.GetFiles(replace, "*", SearchOption.AllDirectories))
+                    {
+                        var destination = Path.Combine(work, Path.GetRelativePath(replace, replacement));
+                        Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                        File.Copy(replacement, destination, true);
+                    }
+                    var entries = Directory.GetFileSystemEntries(work).ToDictionary(
+                        path => int.Parse(Path.GetFileNameWithoutExtension(path).Replace("dec_", "")));
+                    using var reader = new BinaryReader(File.OpenRead(filePath));
+                    for (var i = 0; i < archive.fatb.Entries.Length; i++)
+                    {
+                        var entry = archive.fatb.Entries[i];
+                        if (!entry.IsFolder && entries.ContainsKey(i))
+                        {
+                            continue;
+                        }
+                        var folder = entry.IsFolder
+                            ? entries.GetValueOrDefault(i, Path.Combine(work, $"{i:D4}"))
+                            : work;
+                        Directory.CreateDirectory(folder);
+                        var files = Directory.GetFiles(folder).ToDictionary(
+                            path => int.Parse(Path.GetFileNameWithoutExtension(path).Replace("dec_", "")));
+                        for (var j = 0; j < entry.SubEntries.Length; j++)
+                        {
+                            var subfile = entry.SubEntries[j];
+                            var index = entry.IsFolder ? j : i;
+                            if (!subfile.Exists || files.ContainsKey(index))
+                            {
+                                continue;
+                            }
+                            reader.BaseStream.Position = archive.DataOffset + subfile.Start;
+                            File.WriteAllBytes(Path.Combine(folder, $"{index:D4}.bin"), reader.ReadBytes(subfile.Length));
+                        }
+                    }
+                    Directory.CreateDirectory(Path.GetDirectoryName(output)!);
+                    GARC.PackGARC(work, output, archive.Version, (int)archive.ContentPadToNearest);
+                    Directory.Delete(work, true);
+                }
+                continue;
+            }
+
             for (var i = 0; i < garc.FileCount; i++)
             {
                 var replace = Path.Combine(replaceRoot, relativePath, $"{i:D4}.bin");
                 if (File.Exists(replace))
                 {
+                    _ = garc[i];
                     garc[i] = File.ReadAllBytes(replace);
                     replaced = true;
                 }

@@ -13,6 +13,10 @@ internal partial class Program
                 new ImportCommand(),
                 new ExportTextCommand(),
                 new ImportTextCommand(),
+                new ExportImagesCommand(),
+                new ImportImagesCommand(),
+                new ExportBannerCommand(),
+                new ImportBannerCommand(),
             };
 
         return commands.Run(args);

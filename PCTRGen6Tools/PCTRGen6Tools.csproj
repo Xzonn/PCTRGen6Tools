@@ -18,4 +18,16 @@
     <ProjectReference Include="..\pk3DS\pk3DS.Core\pk3DS.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Kontract">
+      <HintPath>..\lib\Kuriimu\Kontract.dll</HintPath>
+    </Reference>
+    <Reference Include="image_nintendo">
+      <HintPath>..\lib\Kuriimu\image_nintendo.dll</HintPath>
+    </Reference>
+    <Reference Include="Cetera">
+      <HintPath>..\lib\Kuriimu\Cetera.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
