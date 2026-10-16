@@ -59,8 +59,6 @@ internal partial class TextConverter
                                 var time = BitConverter.ToUInt16(data, i); i += 2;
                                 s.Append($"[WAIT {time}]");
                                 break;
-                            case KEY_TEXTNULL: // Empty Text line? Includes linenum so maybe for betatest finding used-unused lines?
-                                return null;
                             default:
                                 string varName = variable.ToString("X4");
 
@@ -139,7 +137,7 @@ internal partial class TextConverter
                         // grab the string
                         int bracket = line.IndexOf(']', i);
                         if (bracket < 0)
-                            throw new ArgumentException("Variable text is not capped properly: " + line);
+                            throw new ArgumentException($"Variable text is not capped properly: {line}");
                         string varText = line[i..bracket];
                         var varValues = GetVariableValues(varText);
                         foreach (ushort v in varValues) bw.Write(v);
@@ -176,7 +174,7 @@ internal partial class TextConverter
             case ']': vals.Add(']'); return vals;
             case 'r': vals.AddRange([KEY_VARIABLE, 1, KEY_TEXTRETURN]); return vals;
             case 'c': vals.AddRange([KEY_VARIABLE, 1, KEY_TEXTCLEAR]); return vals;
-            default: throw new Exception("Invalid terminated line: \\" + esc);
+            default: throw new Exception($"Invalid terminated line: \\{esc}");
         }
     }
 
@@ -184,7 +182,7 @@ internal partial class TextConverter
     {
         string[] split = variable.Split(' ');
         if (split.Length < 2)
-            throw new ArgumentException("Incorrectly formatted variable text: " + variable);
+            throw new ArgumentException($"Incorrectly formatted variable text: {variable}");
 
         var vals = new List<ushort> { KEY_VARIABLE };
         switch (split[0])
@@ -195,14 +193,14 @@ internal partial class TextConverter
                 vals.Add(Convert.ToUInt16(split[1]));
                 break;
             case "WAIT": // Event pause Variable.
-                vals.Add(1);
+                vals.Add(2);
                 vals.Add(KEY_TEXTWAIT);
                 vals.Add(Convert.ToUInt16(split[1]));
                 break;
             case "VAR": // Text Variable
                 vals.AddRange(GetVariableParameters(split[1]));
                 break;
-            default: throw new Exception("Unknown variable method type: " + variable);
+            default: throw new Exception($"Unknown variable method type: {variable}");
         }
         return vals;
     }
@@ -236,7 +234,7 @@ internal partial class TextConverter
         {
             return Convert.ToUInt16(variable, 16);
         }
-        catch { throw new ArgumentException("Variable parse error: " + variable); }
+        catch { throw new ArgumentException($"Variable parse error: {variable}"); }
     }
 
 }
